@@ -14,7 +14,7 @@ const Navbar = () => {
     <div>
       <nav className='flex items-center justify-between py-5 px-4 md:px-[10%] text-gray-300 relative z-[1000]'>
         {/* Logo */}
-        <Link to="/" className='text-2xl font-bold hover:text-white transition'>Crypto Price Tracker</Link>
+        <Link to="/" className='text-2xl font-bold hover:text-white transition'> Cryvia - Crypto Price Tracker</Link>
         
         {/* Hamburger Menu Button (Mobile) */}
         <button 

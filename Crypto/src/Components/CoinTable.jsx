@@ -135,7 +135,7 @@ const CoinTable = () => {
           {/* Animated Gradient Text */}
           <h1 className="text-5xl sm:text-7xl md:text-7xl font-bold text-white mb-4 sm:mb-6 px-4 space-y-6 sm:space-y-8">
             <span className="animate-gradient bg-gradient-to-r from-purple-400 via-pink-500 to-cyan-400 bg-clip-text text-transparent">
-              Crypto Market Tracker
+             Crypto Market Tracker
             </span>
           </h1>
           
