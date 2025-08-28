@@ -66,30 +66,30 @@ const CoinTable = () => {
 
   // Skeleton loader for grid items
   const GridSkeleton = () => (
-    <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700/50 animate-pulse">
-      <div className="flex justify-between items-start mb-3">
+    <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-5 border border-gray-700/30 animate-pulse shadow-lg">
+      <div className="flex justify-between items-start mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-gray-700"></div>
+          <div className="w-10 h-10 rounded-full bg-gray-700/50"></div>
           <div>
-            <div className="h-4 w-24 bg-gray-700 rounded mb-2"></div>
-            <div className="h-3 w-12 bg-gray-700 rounded"></div>
+            <div className="h-5 w-28 bg-gray-700/50 rounded mb-2"></div>
+            <div className="h-3 w-14 bg-gray-700/50 rounded"></div>
           </div>
         </div>
-        <div className="h-5 w-5 bg-gray-700 rounded-full"></div>
+        <div className="h-6 w-6 bg-gray-700/50 rounded-full"></div>
       </div>
       <div className="space-y-3">
-        <div className="h-3 w-full bg-gray-700 rounded"></div>
-        <div className="h-3 w-full bg-gray-700 rounded"></div>
-        <div className="h-3 w-full bg-gray-700 rounded"></div>
+        <div className="h-4 w-full bg-gray-700/50 rounded"></div>
+        <div className="h-4 w-full bg-gray-700/50 rounded"></div>
+        <div className="h-4 w-full bg-gray-700/50 rounded"></div>
       </div>
     </div>
   );
 
   // Skeleton loader for table rows
   const TableRowSkeleton = () => (
-    <div className="grid grid-cols-12 gap-4 p-4 items-center">
+    <div className="grid grid-cols-12 gap-4 p-5 items-center border-b border-gray-700/30 last:border-b-0">
       {[...Array(12)].map((_, i) => (
-        <div key={i} className={`${i === 1 ? 'col-span-3' : i === 3 ? 'col-span-2' : 'col-span-2'} h-4 bg-gray-700 rounded animate-pulse`}></div>
+        <div key={i} className={`${i === 1 ? 'col-span-3' : i === 3 ? 'col-span-2' : 'col-span-2'} h-4 bg-gray-700/50 rounded animate-pulse`}></div>
       ))}
     </div>
   );
@@ -154,11 +154,11 @@ const CoinTable = () => {
                 value={input}
                 onChange={inputHandler}
                 placeholder="Search for a cryptocurrency..."
-                className="w-full px-6 py-4 sm:py-5 rounded-xl bg-gray-800/70 backdrop-blur-lg border border-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 text-white placeholder-gray-400 transition-all duration-300 shadow-lg"
+                className="w-full px-6 py-4 sm:py-5 rounded-2xl bg-gray-800/70 backdrop-blur-lg border border-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 text-white placeholder-gray-400 transition-all duration-300 shadow-lg"
               />
               <button 
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-cyan-500 p-2 rounded-lg hover:opacity-90 transition-opacity"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-cyan-500 p-2 rounded-xl hover:opacity-90 transition-opacity shadow-md"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -172,42 +172,37 @@ const CoinTable = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8 -mt-16 sm:-mt-24 relative z-20">
         {/* Filter Tabs */}
-        <div className="flex flex-wrap gap-2 mb-6 sm:mb-8">
-          <button
-            onClick={() => filterCoins('all')}
-            className={`px-4 py-2 rounded-lg transition-all ${activeTab === 'all' ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}
-          >
-            All Coins
-          </button>
-          <button
-            onClick={() => filterCoins('gainers')}
-            className={`px-4 py-2 rounded-lg transition-all ${activeTab === 'gainers' ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}
-          >
-            Top Gainers
-          </button>
-          <button
-            onClick={() => filterCoins('losers')}
-            className={`px-4 py-2 rounded-lg transition-all ${activeTab === 'losers' ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-lg' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}
-          >
-            Top Losers
-          </button>
-          <button
-            onClick={() => filterCoins('volume')}
-            className={`px-4 py-2 rounded-lg transition-all ${activeTab === 'volume' ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}
-          >
-            By Volume
-          </button>
+        <div className="flex flex-wrap gap-3 mb-8 sm:mb-10">
+          {[
+            { id: 'all', label: 'All Coins', gradient: 'from-purple-600 to-indigo-600' },
+            { id: 'gainers', label: 'Top Gainers', gradient: 'from-green-600 to-emerald-600' },
+            { id: 'losers', label: 'Top Losers', gradient: 'from-red-600 to-rose-600' },
+            { id: 'volume', label: 'By Volume', gradient: 'from-blue-600 to-cyan-600' }
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => filterCoins(tab.id)}
+              className={`px-5 py-2.5 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 ${activeTab === tab.id ? 
+                `bg-gradient-to-r ${tab.gradient} text-white shadow-lg` : 
+                'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 backdrop-blur-sm'}`
+              }
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
 
         {/* View Toggle */}
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-white">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white">
             {isGridView ? 'Market Overview' : 'Market Data'}
           </h2>
-          <div className="flex bg-gray-800 rounded-lg p-1 shadow-inner">
+          <div className="flex bg-gray-800/50 backdrop-blur-sm rounded-xl p-1.5 shadow-inner border border-gray-700/30">
             <button
               onClick={() => setIsGridView(false)}
-              className={`p-2 rounded-md transition-all ${!isGridView ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-700'}`}
+              className={`p-2.5 rounded-lg transition-all duration-300 ${!isGridView ? 
+                'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md' : 
+                'text-gray-300 hover:bg-gray-700/30'}`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
@@ -215,7 +210,9 @@ const CoinTable = () => {
             </button>
             <button
               onClick={() => setIsGridView(true)}
-              className={`p-2 rounded-md transition-all ${isGridView ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md' : 'text-gray-300 hover:bg-gray-700'}`}
+              className={`p-2.5 rounded-lg transition-all duration-300 ${isGridView ? 
+                'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md' : 
+                'text-gray-300 hover:bg-gray-700/30'}`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -228,15 +225,15 @@ const CoinTable = () => {
         {isLoading ? (
           <div className="space-y-4">
             {isGridView ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 {[...Array(8)].map((_, i) => <GridSkeleton key={i} />)}
               </div>
             ) : (
-              <div className="bg-gray-800/50 backdrop-blur-lg rounded-xl overflow-hidden border border-gray-700 shadow-xl overflow-x-auto">
+              <div className="bg-gray-800/30 backdrop-blur-lg rounded-2xl overflow-hidden border border-gray-700/30 shadow-2xl overflow-x-auto">
                 <div className="min-w-[900px]">
-                  <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-700 bg-gradient-to-r from-purple-900/30 to-cyan-900/30">
+                  <div className="grid grid-cols-12 gap-4 p-5 border-b border-gray-700/30 bg-gradient-to-r from-purple-900/30 to-cyan-900/30">
                     {[...Array(6)].map((_, i) => (
-                      <div key={i} className={`${i === 1 ? 'col-span-3' : 'col-span-2'} h-4 bg-gray-700 rounded`}></div>
+                      <div key={i} className={`${i === 1 ? 'col-span-3' : 'col-span-2'} h-4 bg-gray-700/50 rounded`}></div>
                     ))}
                   </div>
                   {[...Array(5)].map((_, i) => <TableRowSkeleton key={i} />)}
@@ -249,10 +246,10 @@ const CoinTable = () => {
           <>
             {/* Table View */}
             {!isGridView ? (
-              <div className="bg-gray-800/50 backdrop-blur-lg rounded-xl overflow-hidden border border-gray-700 shadow-xl overflow-x-auto">
+              <div className="bg-gray-800/30 backdrop-blur-lg rounded-2xl overflow-hidden border border-gray-700/30 shadow-2xl overflow-x-auto">
                 <div className="min-w-[900px]">
                   {/* Table Header */}
-                  <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-700 bg-gradient-to-r from-purple-900/30 to-cyan-900/30">
+                  <div className="grid grid-cols-12 gap-4 p-5 border-b border-gray-700/30 bg-gradient-to-r from-purple-900/30 to-cyan-900/30">
                     <div className="col-span-1 text-center text-sm font-medium text-gray-400">#</div>
                     <div className="col-span-2 text-sm font-medium text-gray-400">Coin</div>
                     <div className="col-span-2 text-right text-sm font-medium text-gray-400">Price</div>
@@ -263,11 +260,11 @@ const CoinTable = () => {
                   </div>
 
                   {/* Table Rows */}
-                  <div className="divide-y divide-gray-700/50">
+                  <div className="divide-y divide-gray-700/30">
                     {displayCoin.slice(0, 20).map((item, index) => (
                       <div
                         key={index}
-                        className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-gray-700/30 transition-colors cursor-pointer group"
+                        className="grid grid-cols-12 gap-4 p-5 items-center hover:bg-gray-700/20 transition-all duration-300 cursor-pointer group"
                         onMouseEnter={() => setIsHovering(index)}
                         onMouseLeave={() => setIsHovering(null)}
                         onClick={() => openCoinDetails(item)}
@@ -277,7 +274,7 @@ const CoinTable = () => {
                           <img
                             src={item.image}
                             alt={item.name}
-                            className={`w-6 h-6 ${isHovering === index ? 'scale-110' : ''} transition-transform`}
+                            className={`w-8 h-8 ${isHovering === index ? 'scale-110' : ''} transition-transform duration-300`}
                           />
                           <div>
                             <div className="font-medium text-white group-hover:text-purple-300 transition-colors">{item.name}</div>
@@ -317,31 +314,31 @@ const CoinTable = () => {
               </div>
             ) : (
               /* Grid View */
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 {displayCoin.slice(0, 12).map((item, index) => (
                   <div
                     key={index}
-                    className={`bg-gradient-to-br from-gray-800/70 to-gray-900/70 rounded-xl p-4 border border-gray-700/50 hover:border-purple-500/50 transition-all cursor-pointer shadow-lg hover:shadow-purple-500/20 group ${isHovering === index ? 'scale-[1.02]' : ''}`}
+                    className={`bg-gradient-to-br from-gray-800/30 to-gray-900/30 rounded-2xl p-5 border border-gray-700/30 hover:border-purple-500/50 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-purple-500/20 group ${isHovering === index ? 'scale-[1.02]' : ''}`}
                     onMouseEnter={() => setIsHovering(index)}
                     onMouseLeave={() => setIsHovering(null)}
                     onClick={() => openCoinDetails(item)}
                   >
-                    <div className="flex justify-between items-start mb-3">
+                    <div className="flex justify-between items-start mb-4">
                       <div className="flex items-center gap-3">
                         <img 
                           src={item.image} 
                           alt={item.name} 
-                          className="w-8 h-8 group-hover:rotate-6 transition-transform" 
+                          className="w-10 h-10 group-hover:rotate-6 transition-transform duration-300" 
                         />
                         <div>
                           <h3 className="font-bold text-white group-hover:text-purple-300 transition-colors">{item.name}</h3>
                           <span className="text-xs text-gray-400 uppercase">{item.symbol}</span>
                         </div>
                       </div>
-                      <span className="text-xs px-2 py-1 bg-gray-700/50 rounded-full text-gray-300">#{item.market_cap_rank}</span>
+                      <span className="text-xs px-2.5 py-1 bg-gray-700/30 rounded-full text-gray-300">#{item.market_cap_rank}</span>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-400">Price</span>
                         <span className="font-medium text-white">
@@ -353,11 +350,11 @@ const CoinTable = () => {
                         <span className={`font-medium ${item.price_change_percentage_24h > 0 ? 'text-green-400' : 'text-red-400'}`}>
                           <div className="inline-flex items-center">
                             {item.price_change_percentage_24h > 0 ? (
-                              <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
                               </svg>
                             ) : (
-                              <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                               </svg>
                             )}
@@ -395,14 +392,14 @@ const CoinTable = () => {
       {/* Coin Details Modal */}
       {isModalOpen && selectedCoin && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="relative max-w-2xl w-full max-h-[90vh] overflow-y-auto bg-gray-800 rounded-xl border border-gray-700 shadow-2xl">
+          <div className="relative max-w-2xl w-full max-h-[90vh] overflow-y-auto bg-gray-800 rounded-2xl border border-gray-700 shadow-2xl">
             {/* Modal Header */}
             <div className="sticky top-0 z-10 p-6 bg-gradient-to-r from-purple-900/50 to-indigo-900/50 flex justify-between items-center border-b border-gray-700">
               <div className="flex items-center gap-4">
                 <img 
                   src={selectedCoin.image} 
                   alt={selectedCoin.name} 
-                  className="w-10 h-10 rounded-full bg-gray-800 p-1 border border-gray-700 shadow-md"
+                  className="w-12 h-12 rounded-full bg-gray-800 p-1 border border-gray-700 shadow-md"
                 />
                 <div>
                   <h2 className="text-xl font-bold text-white">{selectedCoin.name}</h2>
@@ -454,25 +451,25 @@ const CoinTable = () => {
 
               {/* Stats Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                <div className="bg-gray-700/30 rounded-lg p-4 border border-gray-700/50 hover:border-purple-500/50 transition-colors">
+                <div className="bg-gray-700/30 rounded-xl p-4 border border-gray-700/50 hover:border-purple-500/50 transition-colors">
                   <p className="text-gray-400 text-sm mb-1">Market Cap</p>
                   <p className="text-white font-medium">
                     {currency.symbol}{selectedCoin.market_cap ? (selectedCoin.market_cap / 1000000000).toFixed(2) + 'B' : 'N/A'}
                   </p>
                 </div>
-                <div className="bg-gray-700/30 rounded-lg p-4 border border-gray-700/50 hover:border-cyan-500/50 transition-colors">
+                <div className="bg-gray-700/30 rounded-xl p-4 border border-gray-700/50 hover:border-cyan-500/50 transition-colors">
                   <p className="text-gray-400 text-sm mb-1">24h Trading Volume</p>
                   <p className="text-white font-medium">
                     {currency.symbol}{selectedCoin.total_volume ? (selectedCoin.total_volume / 1000000000).toFixed(2) + 'B' : 'N/A'}
                   </p>
                 </div>
-                <div className="bg-gray-700/30 rounded-lg p-4 border border-gray-700/50 hover:border-emerald-500/50 transition-colors">
+                <div className="bg-gray-700/30 rounded-xl p-4 border border-gray-700/50 hover:border-emerald-500/50 transition-colors">
                   <p className="text-gray-400 text-sm mb-1">Circulating Supply</p>
                   <p className="text-white font-medium">
                     {selectedCoin.circulating_supply ? selectedCoin.circulating_supply.toLocaleString() + ' ' + selectedCoin.symbol.toUpperCase() : 'N/A'}
                   </p>
                 </div>
-                <div className="bg-gray-700/30 rounded-lg p-4 border border-gray-700/50 hover:border-rose-500/50 transition-colors">
+                <div className="bg-gray-700/30 rounded-xl p-4 border border-gray-700/50 hover:border-rose-500/50 transition-colors">
                   <p className="text-gray-400 text-sm mb-1">All Time High</p>
                   <p className="text-white font-medium">
                     {currency.symbol}{selectedCoin.ath?.toLocaleString() || 'N/A'}
@@ -490,7 +487,7 @@ const CoinTable = () => {
                     return (
                       <div 
                         key={days} 
-                        className={`bg-gray-700/20 rounded-lg p-3 text-center border ${changeValue > 0 ? 'border-green-500/20 hover:border-green-500/40' : 'border-red-500/20 hover:border-red-500/40'} transition-colors`}
+                        className={`bg-gray-700/20 rounded-xl p-3 text-center border ${changeValue > 0 ? 'border-green-500/20 hover:border-green-500/40' : 'border-red-500/20 hover:border-red-500/40'} transition-colors`}
                       >
                         <p className="text-gray-400 text-xs mb-1">{days}d</p>
                         <p className={`font-medium ${changeValue > 0 ? 'text-green-400' : 'text-red-400'}`}>
@@ -518,7 +515,7 @@ const CoinTable = () => {
               {/* Additional Info */}
               <div>
                 <h3 className="text-lg font-semibold text-white mb-3">Additional Information</h3>
-                <div className="bg-gray-700/30 rounded-lg p-4 border border-gray-700/50">
+                <div className="bg-gray-700/30 rounded-xl p-4 border border-gray-700/50">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <p className="text-gray-400 text-sm">ATH Date</p>
@@ -565,7 +562,7 @@ const CoinTable = () => {
             <div className="sticky bottom-0 p-4 bg-gradient-to-r from-purple-900/50 to-indigo-900/50 border-t border-gray-700 flex justify-end">
               <button
                 onClick={closeModal}
-                className="px-6 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-lg transition-all shadow-md hover:shadow-purple-500/30"
+                className="px-6 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl transition-all shadow-md hover:shadow-purple-500/30 transform hover:-translate-y-0.5"
               >
                 Close
               </button>
@@ -576,7 +573,7 @@ const CoinTable = () => {
 
       {/* Floating Action Button */}
       <button 
-        className="fixed bottom-6 right-6 bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-4 rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transition-all"
+        className="fixed bottom-6 right-6 bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-4 rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transition-all z-30"
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

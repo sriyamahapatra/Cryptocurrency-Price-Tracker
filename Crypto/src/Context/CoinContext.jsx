@@ -17,7 +17,7 @@ const CoinContextProvide = ({ children }) => {
     useEffect(() => {
         const checkApiKey = () => {
             const key = import.meta.env.VITE_HUGGING_FACE_API_KEY;
-            if (!key || key === "your_actual_api_key_here") {
+            if (!key || key === "https://api-inference.huggingface.co/models/distilbert-base-uncased-finetuned-sst-2-english") {
                 setApiStatus("unavailable");
                 console.warn("Hugging Face API key not found or not configured");
             } else {
@@ -32,13 +32,13 @@ const CoinContextProvide = ({ children }) => {
     const getSentimentFromPriceChange = (priceChange) => {
         if (priceChange === null || priceChange === undefined) return '😐';
         
-        if (priceChange > 15) return '🚀';
-        if (priceChange > 8) return '😊';
-        if (priceChange > 3) return '🙂';
+        if (priceChange > 10) return '🚀';
+        if (priceChange > 6) return '😊';
+        if (priceChange > 2) return '🙂';
         if (priceChange > 0) return '😐';
-        if (priceChange > -3) return '😐';
-        if (priceChange > -8) return '🙁';
-        if (priceChange > -15) return '😠';
+        if (priceChange > -2) return '😐';
+        if (priceChange > -6) return '🙁';
+        if (priceChange > -10) return '😠';
         return '💀';
     };
 
