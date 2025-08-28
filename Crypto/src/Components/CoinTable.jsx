@@ -4,7 +4,7 @@ import Navbar from './Navbar';
 import { CoinContext } from '../Context/CoinContext';
 
 const CoinTable = () => {
-  const { allCoin, currency } = useContext(CoinContext);
+  const { allCoin, currency, coinSentiments, isLoadingSentiments } = useContext(CoinContext);
   const [displayCoin, setDisplayCoin] = useState([]);
   const [input, setInput] = useState('');
   const [isGridView, setIsGridView] = useState(false);
@@ -254,10 +254,11 @@ const CoinTable = () => {
                   {/* Table Header */}
                   <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-700 bg-gradient-to-r from-purple-900/30 to-cyan-900/30">
                     <div className="col-span-1 text-center text-sm font-medium text-gray-400">#</div>
-                    <div className="col-span-3 text-sm font-medium text-gray-400">Coin</div>
+                    <div className="col-span-2 text-sm font-medium text-gray-400">Coin</div>
                     <div className="col-span-2 text-right text-sm font-medium text-gray-400">Price</div>
-                    <div className="col-span-2 text-center text-sm font-medium text-gray-400">24h</div>
-                    <div className="col-span-2 text-right text-sm font-medium text-gray-400">Volume</div>
+                    <div className="col-span-1 text-center text-sm font-medium text-gray-400">24h</div>
+                    <div className="col-span-1 text-center text-sm font-medium text-gray-400">Sentiment</div>
+                    <div className="col-span-2 text-right text-sm font-medium text-gray-400">Volume (24h)</div>
                     <div className="col-span-2 text-right text-sm font-medium text-gray-400">Market Cap</div>
                   </div>
 
@@ -272,7 +273,7 @@ const CoinTable = () => {
                         onClick={() => openCoinDetails(item)}
                       >
                         <div className="col-span-1 text-center text-sm text-gray-300">{item.market_cap_rank}</div>
-                        <div className="col-span-3 flex items-center gap-3">
+                        <div className="col-span-2 flex items-center gap-3">
                           <img
                             src={item.image}
                             alt={item.name}
@@ -284,9 +285,9 @@ const CoinTable = () => {
                           </div>
                         </div>
                         <div className="col-span-2 text-right font-medium text-white">
-                          {currency.symbol}{item.current_price.toLocaleString()}
+                          {currency.symbol}{item.current_price?.toLocaleString() || 'N/A'}
                         </div>
-                        <div className={`col-span-2 text-center font-medium ${item.price_change_percentage_24h > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                        <div className={`col-span-1 text-center font-medium ${item.price_change_percentage_24h > 0 ? 'text-green-400' : 'text-red-400'}`}>
                           <div className="inline-flex items-center">
                             {item.price_change_percentage_24h > 0 ? (
                               <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -297,14 +298,17 @@ const CoinTable = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                               </svg>
                             )}
-                            {Math.abs(item.price_change_percentage_24h).toFixed(2)}%
+                            {item.price_change_percentage_24h ? Math.abs(item.price_change_percentage_24h).toFixed(2) + '%' : 'N/A'}
                           </div>
                         </div>
-                        <div className="col-span-2 text-right text-sm text-gray-300">
-                          {currency.symbol}{(item.total_volume / 1000000000).toFixed(2)}B
+                        <div className="col-span-1 text-center text-2xl">
+                            {coinSentiments[item.id] || (isLoadingSentiments ? "..." : "❓")}
                         </div>
                         <div className="col-span-2 text-right text-sm text-gray-300">
-                          {currency.symbol}{(item.market_cap / 1000000000).toFixed(2)}B
+                          {currency.symbol}{item.total_volume ? (item.total_volume / 1000000).toFixed(1) + 'M' : 'N/A'}
+                        </div>
+                        <div className="col-span-2 text-right text-sm text-gray-300">
+                          {currency.symbol}{item.market_cap ? (item.market_cap / 1000000000).toFixed(2) + 'B' : 'N/A'}
                         </div>
                       </div>
                     ))}
@@ -341,7 +345,7 @@ const CoinTable = () => {
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-400">Price</span>
                         <span className="font-medium text-white">
-                          {currency.symbol}{item.current_price.toLocaleString()}
+                          {currency.symbol}{item.current_price?.toLocaleString() || 'N/A'}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
@@ -357,14 +361,26 @@ const CoinTable = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                               </svg>
                             )}
-                            {Math.abs(item.price_change_percentage_24h).toFixed(2)}%
+                            {item.price_change_percentage_24h ? Math.abs(item.price_change_percentage_24h).toFixed(2) + '%' : 'N/A'}
                           </div>
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                         <span className="text-sm text-gray-400">Sentiment</span>
+                         <span className="text-2xl">
+                            {coinSentiments[item.id] || (isLoadingSentiments ? "..." : "❓")}
+                          </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-400">Volume (24h)</span>
+                        <span className="text-sm text-gray-300">
+                          {currency.symbol}{item.total_volume ? (item.total_volume / 1000000).toFixed(1) + 'M' : 'N/A'}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-400">Market Cap</span>
                         <span className="text-sm text-gray-300">
-                          {currency.symbol}{(item.market_cap / 1000000000).toFixed(2)}B
+                          {currency.symbol}{item.market_cap ? (item.market_cap / 1000000000).toFixed(2) + 'B' : 'N/A'}
                         </span>
                       </div>
                     </div>
@@ -409,24 +425,26 @@ const CoinTable = () => {
               <div className="mb-6">
                 <div className="flex items-end gap-2 mb-2">
                   <span className="text-3xl font-bold text-white">
-                    {currency.symbol}{selectedCoin.current_price.toLocaleString()}
+                    {currency.symbol}{selectedCoin.current_price?.toLocaleString() || 'N/A'}
                   </span>
                   <span className={`text-lg font-medium ${selectedCoin.price_change_percentage_24h > 0 ? 'text-green-400' : 'text-red-400'}`}>
-                    {selectedCoin.price_change_percentage_24h > 0 ? (
-                      <span className="inline-flex items-center">
-                        <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                        </svg>
-                        {Math.abs(selectedCoin.price_change_percentage_24h).toFixed(2)}%
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center">
-                        <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                        {Math.abs(selectedCoin.price_change_percentage_24h).toFixed(2)}%
-                      </span>
-                    )}
+                    {selectedCoin.price_change_percentage_24h ? (
+                      selectedCoin.price_change_percentage_24h > 0 ? (
+                        <span className="inline-flex items-center">
+                          <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                          </svg>
+                          {Math.abs(selectedCoin.price_change_percentage_24h).toFixed(2)}%
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center">
+                          <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                          {Math.abs(selectedCoin.price_change_percentage_24h).toFixed(2)}%
+                        </span>
+                      )
+                    ) : 'N/A'}
                   </span>
                 </div>
                 <p className="text-gray-400 text-sm">
@@ -439,25 +457,25 @@ const CoinTable = () => {
                 <div className="bg-gray-700/30 rounded-lg p-4 border border-gray-700/50 hover:border-purple-500/50 transition-colors">
                   <p className="text-gray-400 text-sm mb-1">Market Cap</p>
                   <p className="text-white font-medium">
-                    {currency.symbol}{(selectedCoin.market_cap / 1000000000).toFixed(2)}B
+                    {currency.symbol}{selectedCoin.market_cap ? (selectedCoin.market_cap / 1000000000).toFixed(2) + 'B' : 'N/A'}
                   </p>
                 </div>
                 <div className="bg-gray-700/30 rounded-lg p-4 border border-gray-700/50 hover:border-cyan-500/50 transition-colors">
                   <p className="text-gray-400 text-sm mb-1">24h Trading Volume</p>
                   <p className="text-white font-medium">
-                    {currency.symbol}{(selectedCoin.total_volume / 1000000000).toFixed(2)}B
+                    {currency.symbol}{selectedCoin.total_volume ? (selectedCoin.total_volume / 1000000000).toFixed(2) + 'B' : 'N/A'}
                   </p>
                 </div>
                 <div className="bg-gray-700/30 rounded-lg p-4 border border-gray-700/50 hover:border-emerald-500/50 transition-colors">
                   <p className="text-gray-400 text-sm mb-1">Circulating Supply</p>
                   <p className="text-white font-medium">
-                    {selectedCoin.circulating_supply.toLocaleString()} {selectedCoin.symbol.toUpperCase()}
+                    {selectedCoin.circulating_supply ? selectedCoin.circulating_supply.toLocaleString() + ' ' + selectedCoin.symbol.toUpperCase() : 'N/A'}
                   </p>
                 </div>
                 <div className="bg-gray-700/30 rounded-lg p-4 border border-gray-700/50 hover:border-rose-500/50 transition-colors">
                   <p className="text-gray-400 text-sm mb-1">All Time High</p>
                   <p className="text-white font-medium">
-                    {currency.symbol}{selectedCoin.ath.toLocaleString()}
+                    {currency.symbol}{selectedCoin.ath?.toLocaleString() || 'N/A'}
                   </p>
                 </div>
               </div>
@@ -511,21 +529,23 @@ const CoinTable = () => {
                     <div>
                       <p className="text-gray-400 text-sm">ATH Change</p>
                       <p className={`text-sm ${selectedCoin.current_price >= selectedCoin.ath ? 'text-green-400' : 'text-red-400'}`}>
-                        {selectedCoin.current_price >= selectedCoin.ath ? (
-                          <span className="inline-flex items-center">
-                            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                            </svg>
-                            Currently at ATH
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center">
-                            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                            </svg>
-                            {((selectedCoin.ath - selectedCoin.current_price) / selectedCoin.ath * 100).toFixed(2)}% below ATH
-                          </span>
-                        )}
+                        {selectedCoin.current_price && selectedCoin.ath ? (
+                          selectedCoin.current_price >= selectedCoin.ath ? (
+                            <span className="inline-flex items-center">
+                              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                              </svg>
+                              Currently at ATH
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center">
+                              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                              </svg>
+                              {((selectedCoin.ath - selectedCoin.current_price) / selectedCoin.ath * 100).toFixed(2)}% below ATH
+                            </span>
+                          )
+                        ) : 'N/A'}
                       </p>
                     </div>
                     {selectedCoin.max_supply && (
@@ -564,8 +584,8 @@ const CoinTable = () => {
         </svg>
       </button>
 
-      {/* Global Styles for Animations */}
-      <style jsx global>{`
+      {/*  Styles for Animations */}
+      <style>{`
         @keyframes float {
           0% {
             transform: translateY(0) rotate(0deg);
