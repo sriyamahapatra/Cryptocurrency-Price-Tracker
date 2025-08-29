@@ -28,7 +28,6 @@ const CoinContextProvide = ({ children }) => {
         checkApiKey();
     }, []);
 
-    // Price-based sentiment analysis (reliable fallback)
     const getSentimentFromPriceChange = (priceChange) => {
         if (priceChange === null || priceChange === undefined) return '😐';
         
@@ -49,7 +48,6 @@ const CoinContextProvide = ({ children }) => {
         }
         
         try {
-            // Alternative model that might work better
             const API_URL = "https://api-inference.huggingface.co/models/distilbert-base-uncased-finetuned-sst-2-english";
             const headers = {
                 "Authorization": `Bearer ${import.meta.env.VITE_HUGGING_FACE_API_KEY}`,
@@ -84,12 +82,9 @@ const CoinContextProvide = ({ children }) => {
         }
     };
 
-    // Hybrid approach: Try API occasionally, fallback to price-based sentiment
     const analyzeSentiment = async (coin) => {
-        // Use price-based sentiment as primary approach
         const priceBasedSentiment = getSentimentFromPriceChange(coin.price_change_percentage_24h);
         
-        // Only try API if it's available and for 20% of requests
         if (apiStatus === "available" && Math.random() < 0.2) {
             const prompt = `${coin.name} cryptocurrency is ${coin.price_change_percentage_24h > 0 ? 'rising' : 'falling'} today.`;
             const apiSentiment = await analyzeWithHuggingFace(prompt);
@@ -107,29 +102,24 @@ const CoinContextProvide = ({ children }) => {
         setIsLoadingSentiments(true);
         const sentiments = {};
 
-        // First set all sentiments based on price
         coins.slice(0, 20).forEach(coin => {
             sentiments[coin.id] = getSentimentFromPriceChange(coin.price_change_percentage_24h);
         });
 
         setCoinSentiments({...sentiments});
 
-        // Then try to enhance some with API calls if available
         if (apiStatus === "available") {
             for (const coin of coins.slice(0, 10)) {
                 try {
                     const sentiment = await analyzeSentiment(coin);
                     sentiments[coin.id] = sentiment;
                     
-                    // Update as we go
                     setCoinSentiments(prev => ({...prev, [coin.id]: sentiment}));
-                    
-                    // Add delay to avoid rate limiting
                     await new Promise(resolve => setTimeout(resolve, 1000));
                     
                 } catch (error) {
                     console.error(`Error analyzing sentiment for ${coin.name}:`, error);
-                    // Keep the price-based sentiment
+                   
                 }
             }
         }
@@ -157,8 +147,6 @@ const CoinContextProvide = ({ children }) => {
             const data = await response.json();
             console.log("Fetched coins:", data.length);
             setAllCoin(data);
-            
-            // Fetch sentiments after coins are loaded
             fetchSentimentsForTopCoins(data);
             
         } catch (error) {
@@ -168,7 +156,6 @@ const CoinContextProvide = ({ children }) => {
 
     useEffect(() => {
         fetchAllCoin();
-        // Set up interval to refresh data every 5 minutes
         const interval = setInterval(fetchAllCoin, 300000);
         return () => clearInterval(interval);
     }, [currency]);
